@@ -10,10 +10,11 @@ public class Component extends JComponent{
 		g.setColor(Color.BLACK);
 		for(int cnt = 0; cnt<=19;cnt++)
 		g.drawLine(40*cnt + 20, 20, 40*cnt + 20, 780);
-		
 		for(int cnt = 0; cnt<=19;cnt++)
 			g.drawLine(20, 40*cnt + 20, 780 , 40*cnt + 20);
 	}
 }
 
 //g.fillOval(10, 10, 30, 30); 높이랑 넓이 30이적당하네..
+
+// 30 50 높이. 

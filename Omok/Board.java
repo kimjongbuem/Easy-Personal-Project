@@ -13,25 +13,33 @@ public class Board extends JPanel{
 	private static final long serialVersionUID = 1L;
 	public Board(BadukMap map) {
 		this.map = map;
+		
 	}
 	public void paintComponent(Graphics g) {
 		super.paintComponent(g);
 		setBackground(new Color(255,204,102));
 		g.setColor(Color.BLACK);
 		for(int cnt = 0; cnt<=19;cnt++)
-		g.drawLine(40*cnt + 20, 20, 40*cnt + 20, 780);
+			g.drawLine(40*cnt + 20, 20, 40*cnt + 20, 780);
 		for(int cnt = 0; cnt<=19;cnt++)
 			g.drawLine(20, 40*cnt + 20, 780 , 40*cnt + 20);
-		drawBadukAal(g, 1);
+		drawBadukAal(g, map.getFlagIsBlack());
 	}
-	public void drawBadukAal(Graphics g,int isBlack) {
-		if(isBlack == 1)// °ËÀº»ö Èæµ¹ Ä¥ÇÔ 
-			g.drawOval(10, 10, 30, 30);
-		else // ÇÏ¾áµ¹
-			g.drawOval(10, 10, 20, 20);
+	public void drawBadukAal(Graphics g, boolean isBlack) {
+		for(int y = 1;y<=20;y++) {
+			for(int x = 1;x<= 20;x++) {
+				if(map.getBadukState(x, y)== BadukColor.BLACK)
+				{
+					g.setColor(Color.BLACK);
+					g.fillOval((x-1)*MapSize.ONEBLOCK_SIZE + 5, (y-1)*MapSize.ONEBLOCK_SIZE + 7, MapSize.BLOCK_SIZE, MapSize.BLOCK_SIZE);
+				}
+				else if(map.getBadukState(x, y) == BadukColor.WHITE)
+				{
+					g.setColor(Color.WHITE);
+					g.fillOval((x-1)*MapSize.ONEBLOCK_SIZE + 5, (y-1)*MapSize.ONEBLOCK_SIZE + 7, MapSize.BLOCK_SIZE, MapSize.BLOCK_SIZE);
+				}
+			}
+		}
+		//g.fillOval(5,8, MapSize.BLOCK_SIZE, MapSize.BLOCK_SIZE); // 5 10 45 10
 	}
 }
-
-//g.fillOval(10, 10, 30, 30); ³ôÀÌ¶û ³ÐÀÌ 30ÀÌÀû´çÇÏ³×..
-
-// 30 50 ³ôÀÌ. 

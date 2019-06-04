@@ -40,6 +40,5 @@ public class Board extends JPanel{
 				}
 			}
 		}
-		//g.fillOval(5,8, MapSize.BLOCK_SIZE, MapSize.BLOCK_SIZE); // 5 10 45 10
 	}
 }

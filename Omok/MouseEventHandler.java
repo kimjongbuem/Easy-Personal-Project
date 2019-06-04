@@ -15,21 +15,30 @@ public class MouseEventHandler extends MouseAdapter{
 	}
 	@Override
 	public void mouseClicked(MouseEvent e) {
-			int x = (int)Math.round((e.getX()+20)/MapSize.BLOCK_SIZE);
-	        int y = (int)Math.round((e.getY())/MapSize.BLOCK_SIZE);
+			int x = (int)Math.round((e.getX()+20)/MapSize.ONEBLOCK_SIZE);
+	        int y = (int)Math.round((e.getY())/MapSize.ONEBLOCK_SIZE);
 	        System.out.println("Mouse Clicked at X: " + x + " - Y: " + y);
 	        System.out.println("Mouse Clicked at X: " + e.getX() + " - Y: " + e.getY());
 	      if(x < 1 || x > 20 || y < 1 || y> 20) {
-	    	  // 메시지창 올바른곳에 놔주세요!!
+	    	  gui.showMessage("잘못된 입력입니다!");
 	    	  return;
 	      }
 	      if(!(map.getBadukState(x, y) == BadukColor.NONE)){
-	    	  //이미돌이 올려져 있습니다 메시지창ㄱㄱ
+	    	  gui.showMessage("이미 바둑알이 올려져 있는 곳입니다!");
 	    	  return;
 	      }
 	      map.setMap(map.getFlagIsBlack(), x, y);
-	      map.setFlagisBlack();
+	      
 	      board.repaint();
-	      // if() 승리시
+	      if(map.checkWin(x, y)) //승리시
+	      {		
+	    	  if(map.getFlagIsBlack())
+	    		  gui.showMessage("흑돌이 승리하였습니다!");
+	    	  else
+	    		  gui.showMessage("백돌이 승리하였습니다!");
+	    	  System.exit(0);
+	      }
+	      
+	      map.setFlagisBlack();
 	}
 }

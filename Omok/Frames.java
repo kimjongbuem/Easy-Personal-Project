@@ -1,6 +1,7 @@
 package Omok;
 
 import javax.swing.JFrame;
+import javax.swing.JOptionPane;
 
 @SuppressWarnings("serial")
 public class Frames extends JFrame{
@@ -13,5 +14,8 @@ public class Frames extends JFrame{
 		frame.add(board);
 		frame.addMouseListener(new MouseEventHandler(this, map, board));
 		frame.setVisible(true);
+	}
+	public void showMessage(String message) {
+		JOptionPane.showMessageDialog(this, message);
 	}
 }

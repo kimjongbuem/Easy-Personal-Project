@@ -5,7 +5,6 @@ package Omok;
 public class mainClass {
 
 	public static void main(String[] args) {
-		Frames f = new Frames("오목");
-		//f.setVisible(true);
+		new Frames("오목");
 	}
 }

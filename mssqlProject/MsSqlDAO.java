@@ -2,9 +2,12 @@ package mssqlProject;
 
 import java.sql.*;
 import java.sql.SQLException;
+import java.util.Scanner;
 public class MsSqlDAO {
+	public static Scanner scanner = new Scanner(System.in);
 	 Connection conn;
 	 Statement stmt;
+	 PreparedStatement pStmt;
 	public MsSqlDAO() {
 		try {
 	        Class.forName("com.microsoft.sqlserver.jdbc.SQLServerDriver");
@@ -54,8 +57,36 @@ public class MsSqlDAO {
 		        System.out.println("SQLException : " + sqle);
 	        }	 
 	}
-	public void addNewDepartment(String dept_name , String building , int burget) {
-		
+	public void addNewDepartment(String dept_name , String building , double burget) {
+		String q3SQL = "insert into department values(?,?,?)";
+		try {
+			conn.setAutoCommit(false); // 오토커밋 false
+			pStmt = conn.prepareStatement(q3SQL);
+			pStmt.setString(1, dept_name);
+			pStmt.setString(2, building);
+			pStmt.setDouble(3, burget);
+			pStmt.executeUpdate();
+			
+			System.out.println("등록하시겠습니까? (1 등록 , 2 취소) : ");
+			int msg = scanner.nextInt();
+			scanner.nextLine();
+			if(msg == 1)
+			{
+				conn.commit();
+				System.out.println("등록되었습니다!");
+				
+			}else if(msg == 2) {
+				conn.rollback();
+				System.out.println("롤백(취소) 되었습니다!");
+			}
+			}
+	        catch (SQLException sqle) {
+	        	if(conn!=null) try{conn.rollback();  System.out.println("등록되지 않았습니다 롤백합니다2!!");}
+	        	catch(SQLException e){}  
+	        }	
+		try {
+			conn.setAutoCommit(true);
+		} catch (SQLException e) {System.out.println("오토 커밋화 실패 ㅠㅠ");}
 	}
 }
 

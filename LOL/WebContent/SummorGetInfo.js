@@ -6,9 +6,11 @@ function DisplaySummorInfo(){
 				$.ajax({
 					url : requestApiSummoner+id+riot_codeKey,
 					dataType:'jsonp',
-					success:function(data){
+					async:false,
+					error : function(data) {
 						 $('#show').html(JSON.stringify(data));
-					}, error : function(data) {
+					},
+					success:function(data){
 						 $('#show').html(JSON.stringify(data));
 					}
 				});

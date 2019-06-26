@@ -1,6 +1,7 @@
 package Chess;
 
 import java.util.Scanner;
+import java.util.StringTokenizer;
 
 public class Chess {
 	private ChessMap map;
@@ -32,6 +33,18 @@ public class Chess {
 			return false;
 	}
 	public boolean update(String instruction) {
+		StringTokenizer tokenizer = new StringTokenizer(instruction," /&*^%$");
+		if(tokenizer.countTokens() != 3) {
+			System.out.println("move 명령어가 잘못 되었습니다.");
+			return false;
+		}
+		String instructions[] = new String[3];
+		for(int i = 0; i<3;i++) {
+			instructions[i] = tokenizer.nextToken();
+		}
+		if(instructions[0].equals("move")) {
+			
+		}
 		return true;
 	}
 	public void chessMapShow() {

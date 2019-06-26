@@ -37,9 +37,7 @@ abstract class Piece{ // ¸ÔÈù ±â¹°Àº  x = -1 , y = -1 set
 	int x, y;
 	boolean color; 
 	String name;
-	void move(int x, int y) {
-		
-	}
+	public abstract void move(int x, int y);
 	public void setName(String name) {
 		this.name = name;
 	}
@@ -83,6 +81,11 @@ class King extends Piece{
 	public void setKingY(int y) {
 		this.y = y; 
 	}
+	@Override
+	public void move(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 class Queen extends Piece {
@@ -92,6 +95,12 @@ class Queen extends Piece {
 			name="Q";
 		else
 			name="q";
+	}
+
+	@Override
+	public void move(int x, int y) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
@@ -103,6 +112,12 @@ class Bishop extends Piece{
 		else
 			name="b";
 	}
+
+	@Override
+	public void move(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 class Knight extends Piece{
@@ -112,6 +127,12 @@ class Knight extends Piece{
 			name="K";
 		else
 			name="k";
+	}
+
+	@Override
+	public void move(int x, int y) {
+		// TODO Auto-generated method stub
+		
 	}
 }
 
@@ -123,6 +144,12 @@ class Rook extends Piece{
 		else
 			name="r";
 	}
+
+	@Override
+	public void move(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 
 class Pawn extends Piece{
@@ -132,5 +159,13 @@ class Pawn extends Piece{
 			name="P";
 		else
 			name="p";
+	}
+	public void move() {
+		
+	}
+	@Override
+	public void move(int x, int y) {
+		// TODO Auto-generated method stub
+		
 	}
 }

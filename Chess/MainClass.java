@@ -10,9 +10,9 @@ public class MainClass {
 				chess.chessMapShow();
 			else if(chess.end(instruction))
 				return ;
-//			else if(chess.update(instruction)) {
-//				//로직//
-//			}
+			else if(chess.update(instruction)) {
+				//로직//
+			}
 			else {
 				System.out.println("다시입력해주세요!");
 			}

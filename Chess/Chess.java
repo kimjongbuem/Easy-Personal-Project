@@ -43,8 +43,13 @@ public class Chess {
 			instructions[i] = tokenizer.nextToken();
 		}
 		if(instructions[0].equals("move")) {
-			
+			int curX = map.getMaps().getIntX(instructions[1]);
+			int curY = map.getMaps().getIntY(instructions[1]);
+			int moveX = map.getMaps().getIntX(instructions[2]);
+			int moveY = map.getMaps().getIntY(instructions[2]);
+			map.move(curX, curY, moveX, moveY);
 		}
+		chessMapShow();
 		return true;
 	}
 	public void chessMapShow() {

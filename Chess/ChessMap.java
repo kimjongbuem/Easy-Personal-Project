@@ -1,20 +1,39 @@
 package Chess;
 
 public class ChessMap {
-	ChessCamp[] camp;
-
+	private ChessCamp[] camp;
+	private Maps mapNumber;
+	private boolean selection;// 흑선공
 	public ChessMap() {
-		Maps mapNumber = new Maps();
+		selection = true;
+		mapNumber = new Maps();
 		camp = new ChessCamp[2];
 		camp[0] = new ChessCamp(true);// 블랙진영
 		camp[1] = new ChessCamp(false);// 화이트진영
 	}
+	public Maps getMaps() {
+		return mapNumber;
+	}
+	
+	public void move(int curX, int curY, int moveX, int moveY) {
+		if(curX == -1 || curY == -1) {
+			System.out.println("잘못된 입력입니다!");
+			return;
+		}
+		if(camp[0].getPieceName(curX, curY)!=null) { // 흑
+			camp[0].move(curX, curY, moveX, moveY);
+		}
+		else if(camp[1].getPieceName(curX, curY)!=null) { // 백
+			camp[1].move(curX, curY, moveX, moveY);
+		}
+	}
+	
 	public void showMap() {
 		String pieceBlackName, pieceWhiteName = null;
-		for (int i = 8; i >= 1; i--) {
-			for (int j = 1; j <= 8; j++) {
-				pieceBlackName = camp[0].getPieceName(i, j);
-				pieceWhiteName = camp[1].getPieceName(i, j);
+		for (int i = 8; i >= 1; i--) { // y 
+			for (int j = 1; j <= 8; j++) { // x
+				pieceBlackName = camp[0].getPieceName(j, i);
+				pieceWhiteName = camp[1].getPieceName(j, i);
 				if (pieceBlackName == null && pieceWhiteName == null)
 					System.out.print(".");
 				else if (pieceBlackName != null)
@@ -25,7 +44,6 @@ public class ChessMap {
 			System.out.println("\t" + i);
 		}
 	}
-
 	class Maps {
 		String[][] chessMap;
 		int x, y;
@@ -48,6 +66,7 @@ public class ChessMap {
 			return -1; // 명령 에러
 		}
 		public Maps() {
+			chessMap = new String[9][9];
 			for (int i = 1; i < 9; i++) {
 				for (int j = 1; j < 9; j++) {
 					switch (i) {

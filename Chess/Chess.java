@@ -35,7 +35,7 @@ public class Chess {
 	public boolean update(String instruction) {
 		StringTokenizer tokenizer = new StringTokenizer(instruction," /&*^%$");
 		if(tokenizer.countTokens() != 3) {
-			System.out.println("move 명령어가 잘못 되었습니다.");
+			System.out.println("move 명령어 개수가 잘못 되었습니다.");
 			return false;
 		}
 		String instructions[] = new String[3];
@@ -48,6 +48,10 @@ public class Chess {
 			int moveX = map.getMaps().getIntX(instructions[2]);
 			int moveY = map.getMaps().getIntY(instructions[2]);
 			map.move(curX, curY, moveX, moveY);
+		}
+		else {
+			System.out.println(instructions[0]+" <= move 명령어 스펠링이  잘못 되었습니다.");
+			return false;
 		}
 		chessMapShow();
 		return true;

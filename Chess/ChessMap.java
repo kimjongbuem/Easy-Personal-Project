@@ -3,9 +3,7 @@ package Chess;
 public class ChessMap {
 	private ChessCamp[] camp;
 	private Maps mapNumber;
-	private boolean selection;// Èæ¼±°ø
 	public ChessMap() {
-		selection = true;
 		mapNumber = new Maps();
 		camp = new ChessCamp[2];
 		camp[0] = new ChessCamp(true);// ºí·¢Áø¿µ
@@ -21,10 +19,10 @@ public class ChessMap {
 			return;
 		}
 		if(camp[0].getPieceName(curX, curY)!=null) { // Èæ
-			camp[0].move(curX, curY, moveX, moveY);
+			camp[0].move(curX, curY, moveX, moveY,camp[1]);
 		}
 		else if(camp[1].getPieceName(curX, curY)!=null) { // ¹é
-			camp[1].move(curX, curY, moveX, moveY);
+			camp[1].move(curX, curY, moveX, moveY,camp[0]);
 		}
 	}
 	

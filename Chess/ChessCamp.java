@@ -26,9 +26,6 @@ public class ChessCamp {
 				piece[7+i] = new Pawn(i,2,BWFlag);
 		}
 	}
-	public boolean overLapMoveCheck(int moveX, int moveY) {
-		return true;
-	}
 	public Piece getPiece(int x, int y) {
 		for(int i = 0; i<16;i++) {
 			if(piece[i].getX() == x && piece[i].getY() == y)
@@ -43,15 +40,14 @@ public class ChessCamp {
 		}
 	return null;
 	}
-	public void move(int curX, int curY, int moveX, int moveY) {
+	public void move(int curX, int curY, int moveX, int moveY, ChessCamp otherCamp) {
 			Piece pieceInfo = getPiece(curX, curY);
 			if(pieceInfo.getTeamColor() == selection) {
-				pieceInfo.move(curX, curY, moveX, moveY);
+				pieceInfo.move(moveX, moveY, otherCamp);
 			}else {
 				System.out.println("잘못된 팀컬러 말을 선택하였습니다.");
 				return;
 			}
-			ChessCamp.selection = !ChessCamp.selection;
 	}
 	public boolean getSelection() {
 		return selection;
@@ -63,10 +59,12 @@ public class ChessCamp {
 		int x, y;
 		boolean color; 
 		String name;
-		public abstract void move(int curX, int curY, int moveX, int moveY);
+		public abstract void move(int moveX, int moveY, ChessCamp otherCamp);
 		public void setName(String name) {
 			this.name = name;
 		}
+		public abstract boolean overLapMove(int moveX, int moveY , ChessCamp otherCamp);
+		public abstract boolean otherCampCatch(int moveX, int moveY , ChessCamp otherCamp);
 		public String getName() {
 			return name;
 		}
@@ -108,9 +106,19 @@ public class ChessCamp {
 			this.y = y; 
 		}
 		@Override
-		public void move(int curX, int curY, int moveX, int moveY) {
+		public void move(int moveX, int moveY, ChessCamp otherCamp) {
 			// TODO Auto-generated method stub
 			
+		}
+		@Override
+		public boolean overLapMove(int moveX, int moveY , ChessCamp otherCamp) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		@Override
+		public boolean otherCampCatch(int moveX, int moveY, ChessCamp otherCamp) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
@@ -123,9 +131,19 @@ public class ChessCamp {
 				name="q";
 		}
 		@Override
-		public void move(int curX, int curY, int moveX, int moveY) {
+		public void move(int moveX, int moveY, ChessCamp otherCamp) {
 			// TODO Auto-generated method stub
 			
+		}
+		@Override
+		public boolean overLapMove(int moveX, int moveY, ChessCamp otherCamp ) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		@Override
+		public boolean otherCampCatch(int moveX, int moveY, ChessCamp otherCamp) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
@@ -138,9 +156,19 @@ public class ChessCamp {
 				name="b";
 		}
 		@Override
-		public void move(int curX, int curY, int moveX, int moveY) {
+		public void move(int moveX, int moveY, ChessCamp otherCamp) {
 			// TODO Auto-generated method stub
 			
+		}
+		@Override
+		public boolean overLapMove(int moveX, int moveY , ChessCamp otherCamp) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		@Override
+		public boolean otherCampCatch(int moveX, int moveY, ChessCamp otherCamp) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
@@ -153,9 +181,19 @@ public class ChessCamp {
 				name="k";
 		}
 		@Override
-		public void move(int curX, int curY, int moveX, int moveY) {
+		public void move(int moveX, int moveY, ChessCamp otherCamp) {
 			// TODO Auto-generated method stub
 			
+		}
+		@Override
+		public boolean overLapMove(int moveX, int moveY , ChessCamp otherCamp) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		@Override
+		public boolean otherCampCatch(int moveX, int moveY, ChessCamp otherCamp) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
@@ -168,9 +206,19 @@ public class ChessCamp {
 				name="r";
 		}
 		@Override
-		public void move(int curX, int curY, int moveX, int moveY) {
+		public void move(int moveX, int moveY, ChessCamp otherCamp) {
 			// TODO Auto-generated method stub
 			
+		}
+		@Override
+		public boolean overLapMove(int moveX, int moveY , ChessCamp otherCamp) {
+			// TODO Auto-generated method stub
+			return false;
+		}
+		@Override
+		public boolean otherCampCatch(int moveX, int moveY, ChessCamp otherCamp) {
+			// TODO Auto-generated method stub
+			return false;
 		}
 	}
 
@@ -185,28 +233,46 @@ public class ChessCamp {
 				name="p";
 		}
 		@Override
-		public void move(int curX, int curY, int moveX, int moveY) {
+		public void move(int moveX, int moveY , ChessCamp otherCamp) {
 			System.out.println("폰진입 testing,..");
-		    if(color) {// 흑 팀이라면 y 좌표 현재칸 - 움직이는 칸 = 1 or 2칸 움직일수 있음... 적기물 취할시 x+/-칸 이동가능.
-		    	if(curY - moveY == 1 && moveX == curX && getPieceName(moveX, moveY) ==null) {// 1칸 밑으로 움직이기가능..
-		    		overLap = true; // 더이상 2칸 한번에 못감^^
-		    		setX(moveX); setY(moveY);
-		    	}
-		    	else if(curY - moveY == 2 && moveX == curX && overLapMoveCheck(moveX, moveY) && !overLap) { //밑으로 두칸 움직이기 가능함.
-		    		overLap = true;
-		    		setX(moveX); setY(moveY);
-		    	}
-		    }else { // 화이트 팀
-		    	if(curY - moveY == -1 && moveX == curX && getPieceName(moveX, moveY) ==null) {// 1칸 밑으로 움직이기가능..
-		    		overLap = true; // 더이상 2칸 한번에 못감^^
-		    		setX(moveX); setY(moveY);
-		    	}
-		    	else if(curY - moveY == -2 && moveX == curX && overLapMoveCheck(moveX, moveY) && !overLap) { //밑으로 두칸 움직이기 가능함.
-		    		overLap = true;
-		    		setX(moveX); setY(moveY);
-		    	}
-		    }
+				if (overLapMove(moveX, moveY, otherCamp) || otherCampCatch(moveX, moveY, otherCamp)) { // 밑으로 두칸 움직이기 가능함.
+					overLap = true;
+					setX(moveX);
+					setY(moveY);
+					ChessCamp.selection = !ChessCamp.selection; // 이동성공시만 컬러를 바꾸자!!
+				}
+				else System.out.println("해당 기물이 이동할 수 없습니다.");
+		}
+		@Override
+		public boolean overLapMove(int moveX, int moveY, ChessCamp otherCamp) {
+			int curX = getX(); int curY = getY();
+			if(curX != moveX) return false;
+			int num = curY - moveY;
 			
+			if(num < 0) num = - num;
+			if(num == 2 && overLap)
+				return false;
+			
+			if(color) { // 블랙팀이면
+				for(int i = 1; i<=num;i++) {
+					if(getPieceName(curX, curY - i) != null || otherCamp.getPieceName(curX, curY - i) != null)
+						return false;
+				}
+			}else {
+				for(int i = 1; i<=num;i++) {
+					if(getPieceName(curX, curY + i) != null || otherCamp.getPieceName(curX, curY - i) != null)
+						return false;
+				}
+			}
+			return true;
+		}
+		@Override
+		public boolean otherCampCatch(int moveX, int moveY, ChessCamp otherCamp) {
+			if (otherCamp.getPieceName(moveX, moveY) == null) // 적기물 없으면 false
+				return false;
+			otherCamp.getPiece(moveX, moveY).setX(-1); // 다시안나오게 -1 값넣어줌.
+			return true;
+
 		}
 	}
 }

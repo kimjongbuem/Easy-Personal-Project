@@ -2,6 +2,7 @@ package Chess;
 public class ChessCamp {
 	private boolean BWFlag;
 	private Piece piece[];
+	private int totalCount = 0;
 	public static boolean selection = true;
 	public ChessCamp(boolean BWFlag) {
 		piece = new Piece[16];
@@ -198,6 +199,7 @@ public class ChessCamp {
 	}
 
 	class Rook extends Piece{
+		// 룩은 y축 이동 일때만 색에따른 값을 다르게 주면 된다. x축 이동시에는 색에 따른 이동 값은 상관이없기 때문... 
 		public Rook(int x, int y, boolean color) {
 			this.x = x ;this.y = y; this.color = color;
 			if(color == true)
@@ -207,18 +209,82 @@ public class ChessCamp {
 		}
 		@Override
 		public void move(int moveX, int moveY, ChessCamp otherCamp) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("룩 testing...");
+			if (overLapMove(moveX, moveY, otherCamp) || otherCampCatch(moveX, moveY, otherCamp)) {
+				setX(moveX);
+				setY(moveY);
+				ChessCamp.selection = !ChessCamp.selection; // 이동성공시만 컬러를 바꾸자!!
+			}
+			else System.out.println("해당 기물이 해당 지점 까지 이동 할 수 없습니다.");
 		}
 		@Override
 		public boolean overLapMove(int moveX, int moveY , ChessCamp otherCamp) {
-			// TODO Auto-generated method stub
-			return false;
+			int curX = getX();
+			if(curX == moveX) { // 세로의 움직임 
+				return overLapMoveY(moveY, otherCamp);
+			}
+			else { // 가로 움직임
+				return overLapMoveX(moveX, otherCamp);
+			}
 		}
 		@Override
 		public boolean otherCampCatch(int moveX, int moveY, ChessCamp otherCamp) {
-			// TODO Auto-generated method stub
-			return false;
+			if (otherCamp.getPieceName(moveX, moveY) == null) // 적기물 없으면 false
+				return false;
+			otherCamp.getPiece(moveX, moveY).setX(-1); // 다시안나오게 -1 값넣어줌.
+			return true;
+		}
+		
+		public boolean overLapMoveX(int moveX, ChessCamp otherCamp) {
+			int curX = getX();
+			int curY = getY();
+			int num = moveX - curX;
+
+			if (num > 0) { // 오른쪽 이동시....
+				for (int i = 1; i <= num; i++) {
+					if (getPieceName(curX + i, curY) != null || otherCamp.getPieceName(curX + i, curY) != null) {
+						return false;
+					}
+				}
+			} else { // 왼쪽이동시....
+				num = -num;
+				for (int i = 1; i <= num; i++) {
+					if (getPieceName(curX - i, curY) != null || otherCamp.getPieceName(curX - i, curY) != null) {
+						return false;
+					}
+				}
+			}
+			if (otherCampCatch(moveX, curY, otherCamp))
+				return true; // 해당지점까지 다른 기물이 없고 움직일 위치에 적 기물을 잡는다.
+			
+			return true; // 해당 지점까지 다른 기물이없으니.. oK!
+		}
+		
+		
+		public boolean overLapMoveY(int moveY, ChessCamp otherCamp) {
+			int curX = getX();
+			int curY = getY();
+			int num = curY - moveY;
+			if (num < 0)
+				num = -num;
+			
+			if (color) { // 블랙 룩
+				for (int i = 1; i <= num; i++) {
+					if (getPieceName(curX, curY - i) != null || otherCamp.getPieceName(curX, curY - i) != null) {
+						return false;
+					}
+				}
+			} else { // 화이트 룩
+				for (int i = 1; i <= num; i++) {
+					if (getPieceName(curX, curY + i) != null || otherCamp.getPieceName(curX, curY + i) != null) {
+						return false;
+					}
+				}
+			}
+			if (otherCampCatch(curX, moveY, otherCamp))
+				return true; // 해당지점까지 다른 기물이 없고 움직일 위치에 적 기물을 잡는다.
+			
+			return true; // 해당 지점까지 다른 기물이없으니.. oK!
 		}
 	}
 

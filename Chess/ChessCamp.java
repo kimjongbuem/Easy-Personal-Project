@@ -183,18 +183,69 @@ public class ChessCamp {
 		}
 		@Override
 		public void move(int moveX, int moveY, ChessCamp otherCamp) {
-			// TODO Auto-generated method stub
-			
+			System.out.println("나이트 testing...");
+			if (upperMove(moveX, moveY, otherCamp) || downMove(moveX, moveY, otherCamp) ||
+				leftMove(moveX, moveY, otherCamp)||rightMove(moveX, moveY, otherCamp)) {
+				setX(moveX);
+				setY(moveY);
+				ChessCamp.selection = !ChessCamp.selection; // 이동성공시만 컬러를 바꾸자!!
+			}
+			else System.out.println("해당 기물이 해당 지점 까지 이동 할 수 없습니다.");			
 		}
 		@Override
-		public boolean overLapMove(int moveX, int moveY , ChessCamp otherCamp) {
-			// TODO Auto-generated method stub
-			return false;
-		}
+		public boolean overLapMove(int moveX, int moveY , ChessCamp otherCamp) {return false;}
 		@Override
 		public boolean otherCampCatch(int moveX, int moveY, ChessCamp otherCamp) {
-			// TODO Auto-generated method stub
-			return false;
+			if (otherCamp.getPieceName(moveX, moveY) == null) // 적기물 없으면 false
+				return false;
+			otherCamp.getPiece(moveX, moveY).setX(-1); // 다시안나오게 -1 값넣어줌.
+			return true;
+		}
+		// 화이트 시점방향 함수들.. //
+		public boolean upperMove(int moveX, int moveY, ChessCamp otherCamp) {
+			// 화이트 팀기준 윗방향으로 가는 나이트.... 물론 블랙팀도 가능하나 시점 상 화이트팀이 보이는방향으로..
+			int curX = getX(); int curY = getY(); 
+			if(moveX - curX == 1) ; else if(moveX - curX == -1); else return false;
+			if(moveY - curY == 2 ) {
+				if(getPieceName(moveX, moveY)!= null) // 아군기물이 있다면..
+					return false;
+				else if (otherCampCatch(moveX, moveY, otherCamp))
+					return true; // 움직일 위치에 적 기물을 잡는다.
+			}else return false;
+			return true;
+		}
+		public boolean rightMove(int moveX, int moveY, ChessCamp otherCamp) {
+			int curX = getX(); int curY = getY(); 
+			if(moveY - curY == 1) ; else if(moveY - curY == -1); else return false;
+			if(moveX - curX == 2 ) {
+				if(getPieceName(moveX, moveY)!= null) // 아군기물이 있다면..
+					return false;
+				else if (otherCampCatch(moveX, moveY, otherCamp))
+					return true; // 움직일 위치에 적 기물을 잡는다.
+			}else return false;
+			return true;
+		}
+		public boolean downMove(int moveX, int moveY, ChessCamp otherCamp) {
+			int curX = getX(); int curY = getY(); 
+			if(moveX - curX == 1) ; else if(moveX - curX == -1); else return false;
+			if(moveY - curY == -2 ) {
+				if(getPieceName(moveX, moveY)!= null) // 아군기물이 있다면..
+					return false;
+				else if (otherCampCatch(moveX, moveY, otherCamp))
+					return true; // 움직일 위치에 적 기물을 잡는다.
+			}else return false;
+			return true;
+		}
+		public boolean leftMove(int moveX, int moveY, ChessCamp otherCamp) {
+			int curX = getX(); int curY = getY(); 
+			if(moveY - curY == 1) ; else if(moveY - curY == -1); else return false;
+			if(moveX - curX == -2 ) {
+				if(getPieceName(moveX, moveY)!= null) // 아군기물이 있다면..
+					return false;
+				else if (otherCampCatch(moveX, moveY, otherCamp))
+					return true; // 움직일 위치에 적 기물을 잡는다.
+			}else return false;
+			return true;
 		}
 	}
 
@@ -210,7 +261,7 @@ public class ChessCamp {
 		@Override
 		public void move(int moveX, int moveY, ChessCamp otherCamp) {
 			System.out.println("룩 testing...");
-			if (overLapMove(moveX, moveY, otherCamp) || otherCampCatch(moveX, moveY, otherCamp)) {
+			if (overLapMove(moveX, moveY, otherCamp)) {
 				setX(moveX);
 				setY(moveY);
 				ChessCamp.selection = !ChessCamp.selection; // 이동성공시만 컬러를 바꾸자!!
@@ -241,18 +292,20 @@ public class ChessCamp {
 			int num = moveX - curX;
 
 			if (num > 0) { // 오른쪽 이동시....
-				for (int i = 1; i <= num; i++) {
+				for (int i = 1; i <= num - 1; i++) {
 					if (getPieceName(curX + i, curY) != null || otherCamp.getPieceName(curX + i, curY) != null) {
 						return false;
 					}
 				}
+				if (getPieceName(curX+ num, curY ) != null) return false;
 			} else { // 왼쪽이동시....
 				num = -num;
-				for (int i = 1; i <= num; i++) {
+				for (int i = 1; i <= num - 1; i++) {
 					if (getPieceName(curX - i, curY) != null || otherCamp.getPieceName(curX - i, curY) != null) {
 						return false;
 					}
 				}
+				if (getPieceName(curX - num, curY ) != null) return false;
 			}
 			if (otherCampCatch(moveX, curY, otherCamp))
 				return true; // 해당지점까지 다른 기물이 없고 움직일 위치에 적 기물을 잡는다.
@@ -265,21 +318,22 @@ public class ChessCamp {
 			int curX = getX();
 			int curY = getY();
 			int num = curY - moveY;
-			if (num < 0)
-				num = -num;
-			
-			if (color) { // 블랙 룩
-				for (int i = 1; i <= num; i++) {
+	
+			if (num > 0) { 
+				for (int i = 1; i <= num - 1; i++) {
 					if (getPieceName(curX, curY - i) != null || otherCamp.getPieceName(curX, curY - i) != null) {
 						return false;
 					}
 				}
+				if (getPieceName(curX, curY - num) != null) return false;
 			} else { // 화이트 룩
-				for (int i = 1; i <= num; i++) {
+				num = -num;
+				for (int i = 1; i <= num - 1; i++) {
 					if (getPieceName(curX, curY + i) != null || otherCamp.getPieceName(curX, curY + i) != null) {
 						return false;
 					}
 				}
+				if (getPieceName(curX, curY + num) != null) return false;
 			}
 			if (otherCampCatch(curX, moveY, otherCamp))
 				return true; // 해당지점까지 다른 기물이 없고 움직일 위치에 적 기물을 잡는다.
